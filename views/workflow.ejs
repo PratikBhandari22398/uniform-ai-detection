@@ -1,0 +1,338 @@
+<%- include('includes/boiler.ejs') %>
+    <style>
+        /* Services Section Wrapper */
+        .services-section {
+            background: #050505;
+            padding: 120px 0;
+            color: white;
+            width: 100%;
+        }
+
+        /* Container */
+        .services-container {
+            max-width: 1650px;
+            margin: auto;
+            padding: 0 80px;
+        }
+
+        /* ONE-LINE HEADER (title | description | CTA) */
+        .services-header {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr auto;
+            gap: 40px;
+            align-items: center;
+            margin-bottom: 80px;
+        }
+
+        .services-left span {
+            color: #d4ff37;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .services-title {
+            font-size: 48px;
+            font-weight: 800;
+            line-height: 1.15;
+            margin: 0;
+        }
+
+        .services-desc {
+            color: #bfbfbf;
+            font-size: 16px;
+            line-height: 1.6;
+            max-width: 540px;
+            margin: 0;
+        }
+
+        .btn-view {
+            background: #edff00;
+            padding: 14px 34px;
+            border-radius: 50px;
+            color: #000;
+            font-weight: 800;
+            text-decoration: none;
+            justify-self: end;
+            white-space: nowrap;
+            font-size: 16px;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .btn-view:hover {
+            background: #f3ff54;
+            transform: translateY(-3px);
+            box-shadow: 0 18px 40px rgba(231, 255, 0, 0.12);
+        }
+
+        /* GRID */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+        }
+
+        /* CARD */
+        .service-card {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 22px;
+            padding: 40px 30px;
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
+            min-height: 330px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .service-card:hover {
+
+            --bs-link-color-rgb: var(--bs-link-hover-color-rgb);
+            transform: translateY(-8px);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+        }
+
+        /* ICON */
+        .icon-box {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            background: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 30px;
+        }
+
+        /* HIGHLIGHT CARD (base) */
+        .service-card.highlight {
+            background: linear-gradient(180deg, #fff900 0%, #e7e400 100%);
+            color: black;
+            border: none;
+            box-shadow: 0 10px 30px rgba(231, 231, 0, 0.12);
+        }
+
+        /* BASE CARD */
+        .service-card {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 22px;
+            padding: 40px 30px;
+            min-height: 330px;
+            transition: 0.35s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* ON HOVER → turn yellow like RapooX */
+        .service-card:hover {
+            background: linear-gradient(180deg, #fff900 0%, #e7e400 100%);
+            border-color: transparent;
+            transform: translateY(-12px);
+            box-shadow: 0 28px 60px rgba(231, 231, 0, 0.25);
+        }
+
+        /* Icon becomes black on hover */
+        .service-card:hover .icon-box {
+            background: #000 !important;
+            color: #edff00 !important;
+        }
+
+        /* Title/text become dark */
+        .service-card:hover .service-title,
+        .service-card:hover .service-text {
+            color: #222 !important;
+        }
+
+        /* Read more link */
+        .service-card:hover .service-link {
+            color: #000 !important;
+            font-weight: 800;
+        }
+
+        /* arrow slide remains */
+        .service-link .arrow {
+            display: inline-block;
+            transition: transform 0.28s ease;
+        }
+
+        .service-link:hover .arrow {
+            transform: translateX(6px);
+        }
+
+        /* Highlight card (remains stronger glow) */
+        .service-card.highlight:hover {
+            transform: translateY(-16px) scale(1.02);
+            box-shadow:
+                0 30px 80px rgba(231, 231, 0, 0.35),
+                0 6px 30px rgba(231, 231, 0, 0.20);
+        }
+
+        /* HIGHLIGHT CARD: glow + stronger lift on hover */
+        .service-card.highlight:hover {
+            transform: translateY(-16px) scale(1.01);
+            /* outer glow */
+            box-shadow:
+                0 30px 80px rgba(231, 231, 0, 0.18),
+                0 6px 30px rgba(231, 231, 0, 0.12),
+                inset 0 0 36px rgba(255, 255, 255, 0.02);
+        }
+
+        .highlight .icon-box {
+            background: #000;
+            color: #edff00;
+        }
+
+        /* Titles / text */
+        .service-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .service-text {
+            color: #bfbfbf;
+            margin-bottom: 20px;
+            line-height: 1.55;
+            font-size: 15px;
+        }
+
+        .highlight .service-text {
+            color: #333;
+        }
+
+        /* read more link: arrow slide animation */
+        .service-link {
+            color: #edff00;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.22s ease;
+        }
+
+        /* the arrow itself */
+        .service-link .arrow {
+            display: inline-block;
+            transform: translateX(0);
+            transition: transform 0.28s cubic-bezier(.2, .9, .2, 1);
+        }
+
+        /* on link hover slide arrow and slightly nudge text */
+        .service-link:hover {
+            color: #ffffff;
+        }
+
+        .service-link:hover .arrow {
+            transform: translateX(6px);
+        }
+
+        /* make the arrow return smoothly when hover ends */
+        .service-link .arrow {
+            will-change: transform;
+        }
+
+        /* responsive */
+        @media (max-width: 1200px) {
+            .services-header {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .btn-view {
+                justify-self: start;
+            }
+
+            .services-title {
+                font-size: 38px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .services-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <section class="services-section">
+        <div class="services-container">
+
+            <!-- HEADER -->
+            <div class="services-header">
+                <div class="services-left">
+                    <span>WORK FLOW</span>
+                    <h1 class="services-title">How to Use Student Monitor<br><span class="text-4xl "> Smarter Way to
+                            Manage
+                            Campus
+                            Compliance</span></h1>
+                </div>
+
+                <p class="services-desc">
+                    Student Monitor makes uniform and ID checking effortless with fast, accurate, and fully automated AI
+                    tools.
+                </p>
+
+                <a href="#" class="btn-view">Get Started →</a>
+            </div>
+
+            <!-- GRID -->
+            <div class="services-grid">
+                <div class="service-card">
+                    <div>
+                        <div class="icon-box"> 📤</div>
+                        <h3 class="service-title">1. Upload Image or Connect Camera</h3>
+                        <p class="service-text">Upload a student photo or connect a live camera feed from gates or
+                            classrooms for real-time monitoring.
+
+                        </p>
+                    </div>
+                    <a href="#" class="service-link">Read More <span class="arrow">→</span></a>
+                </div>
+
+                <div class="service-card">
+                    <div>
+                        <div class="icon-box">🤖</div>
+                        <h3 class="service-title">2. Automatic AI Detection</h3>
+                        <p class="service-text">Our AI instantly analyzes the image/frame to detect uniforms and ID
+                            cards—no manual checking required.
+
+                        </p>
+                    </div>
+                    <a href="#" class="service-link">Read More <span class="arrow">→</span></a>
+                </div>
+
+                <div class="service-card">
+                    <div>
+                        <div class="icon-box">⚡</div>
+                        <h3 class="service-title">View Results Instantly</h3>
+                        <p class="service-text">Get immediate results showing compliant or non-compliant status along
+                            with confidence levels and details.
+                        </p>
+                    </div>
+                    <a href="#" class="service-link">Read More <span class="arrow">→</span></a>
+                </div>
+
+                <div class="service-card">
+                    <div>
+                        <div class="icon-box">🔔</div>
+                        <h3 class="service-title">4. Receive Alerts Automatically</h3>
+                        <p class="service-text">If a student violates uniform or ID rules, alerts are instantly sent to
+                            admins, teachers, or security staff.
+
+                        </p>
+                    </div>
+                    <a href="#" class="service-link">Read More <span class="arrow">→</span></a>
+                </div>
+            </div>
+        </div>
+    </section>

@@ -1,0 +1,409 @@
+<!-- Experts header + grid (paste into your EJS) -->
+<!-- Experts — 4 card grid, neon yellow / black theme -->
+<style>
+    :root {
+        --bg: #050505;
+        --neon: #EDFF00;
+        --neon-2: #D4FF37;
+        --muted: #bfbfbf;
+        --card-bg: rgba(255, 255, 255, 0.03);
+    }
+
+    .experts-section {
+        background: var(--bg);
+        color: #fff;
+        padding: 100px 20px;
+        font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    .experts-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 28px;
+    }
+
+    /* Header */
+    .experts-header {
+        text-align: left;
+        margin-bottom: 36px;
+    }
+
+    .experts-eyebrow {
+        color: var(--neon-2);
+        font-weight: 800;
+        letter-spacing: .6px;
+        text-transform: uppercase;
+        font-size: 13px;
+        margin-bottom: 10px;
+        display: inline-block;
+    }
+
+    .experts-title {
+        font-size: clamp(28px, 4.5vw, 44px);
+        line-height: 1.04;
+        font-weight: 900;
+        margin: 0 0 12px 0;
+        color: #fff;
+        display: inline-block;
+        transition: transform .22s ease;
+    }
+
+    .experts-sub {
+        color: var(--muted);
+        max-width: 820px;
+        margin: 8px 0 0 0;
+        line-height: 1.6;
+    }
+
+    /* grid */
+    .experts-grid {
+        margin-top: 34px;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 28px;
+        align-items: stretch;
+    }
+
+    /* card */
+    .expert-card {
+        background: var(--card-bg);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 16px;
+        padding: 18px;
+        transition: transform .28s cubic-bezier(.2, .9, .3, 1), box-shadow .28s, border-color .28s;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        min-height: 420px;
+    }
+
+    .expert-card:focus-within,
+    .expert-card:hover {
+        transform: translateY(-10px);
+        border-color: rgba(237, 255, 0, 0.95);
+        box-shadow: 0 28px 60px rgba(237, 255, 0, 0.08), 0 8px 28px rgba(0, 0, 0, 0.5);
+    }
+
+    /* image area */
+    .expert-img-wrap {
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.6);
+    }
+
+    .expert-img {
+        width: 100%;
+        height: 280px;
+        object-fit: cover;
+        display: block;
+        transition: transform .45s ease;
+    }
+
+    .expert-card:hover .expert-img {
+        transform: scale(1.03);
+    }
+
+    /* icon row (in top-left corner of image) optional small overlay removed to keep clean) */
+
+    /* social icons container (top-right on image) */
+    .expert-social {
+        position: absolute;
+        right: 12px;
+        top: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        transform: translateX(16px);
+        opacity: 0;
+        pointer-events: none;
+        transition: transform .28s ease, opacity .28s ease;
+    }
+
+    .expert-card:hover .expert-social,
+    .expert-card:focus-within .expert-social {
+        transform: translateX(0);
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .social-dot {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.6);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        transition: transform .15s ease, background .18s ease;
+        cursor: pointer;
+    }
+
+    .social-dot:hover {
+        transform: translateY(-4px);
+    }
+
+    .social-dot.primary {
+        background: var(--neon);
+        color: #000;
+        border: none;
+    }
+
+    /* icon box below image */
+    .expert-icon-box {
+        width: 88px;
+        height: 70px;
+        border-radius: 18px;
+        background: #151515;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: -3px auto 6px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+        transition: background .22s ease, box-shadow .22s ease;
+    }
+
+    .expert-card:hover .expert-icon-box {
+        background: var(--neon);
+        box-shadow: 0 28px 60px rgba(237, 255, 0, 0.12);
+    }
+
+    .expert-icon-box i {
+        font-size: 32px;
+        color: var(--neon);
+        transition: color .22s ease, transform .22s;
+    }
+
+    /* make icon black when card hovered */
+    .expert-card:hover .expert-icon-box i {
+        color: #000;
+        transform: scale(1.03);
+    }
+
+    /* name / role */
+    .expert-name {
+        text-align: center;
+        font-weight: 800;
+        font-size: 18px;
+        margin-top: 6px;
+        color: #fff;
+        transition: color .22s ease, text-shadow .22s ease;
+    }
+
+    .expert-role {
+        text-align: center;
+        margin-top: 6px;
+        color: var(--neon-2);
+        font-weight: 700;
+        font-size: 13px;
+        letter-spacing: .3px;
+    }
+
+    /* title glow on hover */
+    .expert-card:hover .expert-name {
+        color: var(--neon);
+        text-shadow: 0 10px 30px rgba(237, 255, 0, 0.18);
+    }
+
+    /* footer CTA area or short bio */
+    .expert-bio {
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.5;
+        text-align: center;
+        margin-top: 8px;
+        flex: 1;
+    }
+
+    /* small "connect" button */
+    .expert-cta {
+        margin-top: 10px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .btn-connect {
+        background: transparent;
+        color: var(--neon);
+        border: 1px solid rgba(237, 255, 0, 0.25);
+        padding: 10px 18px;
+        border-radius: 999px;
+        font-weight: 800;
+        transition: background .18s, transform .12s ease;
+    }
+
+    .btn-connect:hover {
+        background: var(--neon);
+        color: #050505;
+        transform: translateY(-3px);
+        box-shadow: 0 20px 50px rgba(237, 255, 0, 0.12);
+    }
+
+    /* small decorative dots bottom-right */
+    .card-dots {
+        position: absolute;
+        right: 14px;
+        bottom: 14px;
+        opacity: .06;
+        font-size: 28px;
+    }
+
+    /* responsive */
+    @media (max-width: 1100px) {
+        .experts-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .expert-img {
+            height: 260px;
+        }
+
+        .expert-card {
+            min-height: 380px;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .experts-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .expert-img {
+            height: 220px;
+        }
+
+        .expert-card {
+            min-height: auto;
+        }
+
+        .expert-icon-box {
+            margin-top: 12px;
+        }
+    }
+</style>
+
+<section class="experts-section" aria-labelledby="expertsHeading">
+    <div class="experts-container">
+        <header class="experts-header">
+            <div class="experts-eyebrow">Our Experts</div>
+            <h2 id="expertsHeading" class="experts-title">Introducing Our Passionate and<br>Skilled Professionals</h2>
+            <p class="experts-sub">Meet the experts behind Student Monitor — building fast, accurate and
+                production-ready AI systems for campus safety and compliance.</p>
+        </header>
+
+        <div class="experts-grid" id="expertsGrid">
+            <!-- Card 1 -->
+            <article class="expert-card" tabindex="0">
+                <div class="expert-img-wrap" aria-hidden="true">
+                    <img src="team-1.jpeg" alt="Noah Bennett" class="expert-img">
+                    <div class="expert-social" style="position:absolute;right:12px;top:12px;">
+                        <div class="expert-social"> <!-- reserved, if you want inside image -->
+                            <!-- left empty to rely on .expert-social below -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- optional social (appears on hover) -->
+                <div class="expert-social" style="position:relative;">
+                    <div class="expert-social-icons" style="position:absolute;right:12px;top:-230px;">
+                        <!-- these will appear due to .expert-social in CSS; kept here for semantics if JS toggles needed -->
+                    </div>
+                </div>
+
+                <!-- floating centered icon box -->
+                <div class="expert-icon-box" aria-hidden="true">
+                    <i class="fa-solid fa-user-gear"></i>
+                </div>
+
+                <div class="expert-name">Noah Bennett</div>
+                <div class="expert-role">Lead Developer</div>
+
+                <p class="expert-bio">Builds and deploys the face & uniform detection pipeline used across campuses.</p>
+
+                <div class="expert-cta">
+                    <button class="btn-connect">Connect</button>
+                </div>
+
+                <div class="card-dots">•••</div>
+            </article>
+
+            <!-- Card 2 -->
+            <article class="expert-card" tabindex="0">
+                <div class="expert-img-wrap" aria-hidden="true">
+                    <img src="team-2.jpeg" alt="Anastasia Quinn" class="expert-img">
+                </div>
+
+                <div class="expert-icon-box" aria-hidden="true">
+                    <i class="fa-solid fa-bullhorn"></i>
+                </div>
+
+                <div class="expert-name">Anastasia Quinn</div>
+                <div class="expert-role">Project Manager</div>
+
+                <p class="expert-bio">Coordinates deployments, QA and product roadmaps to ensure reliability at scale.
+                </p>
+
+                <div class="expert-cta">
+                    <button class="btn-connect">Connect</button>
+                </div>
+            </article>
+
+            <!-- Card 3 -->
+            <article class="expert-card" tabindex="0">
+                <div class="expert-img-wrap" aria-hidden="true">
+                    <img src="team-3.jpeg" alt="Leonard Drake" class="expert-img">
+                </div>
+
+                <div class="expert-icon-box" aria-hidden="true">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+
+                <div class="expert-name">Leonard Drake</div>
+                <div class="expert-role">Data Scientist</div>
+
+                <p class="expert-bio">Designs the detection models and tunes confidence metrics for real-time inference.
+                </p>
+
+                <div class="expert-cta">
+                    <button class="btn-connect">Connect</button>
+                </div>
+            </article>
+
+            <!-- Card 4 -->
+            <article class="expert-card" tabindex="0">
+                <div class="expert-img-wrap" aria-hidden="true">
+                    <img src="team-4.jpeg" alt="Emma Collins" class="expert-img">
+                </div>
+
+                <div class="expert-icon-box" aria-hidden="true">
+                    <i class="fa-solid fa-paint-brush"></i>
+                </div>
+
+                <div class="expert-name">Emma Collins</div>
+                <div class="expert-role">Designer</div>
+
+                <p class="expert-bio">Creates the UI/UX and ensures visual clarity in dashboards and alerts.</p>
+
+                <div class="expert-cta">
+                    <button class="btn-connect">Connect</button>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Make keyboard focus styles visible and allow Enter to "click" connect button
+    (function () {
+        const cards = document.querySelectorAll('.expert-card');
+        cards.forEach(card => {
+            card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    const btn = card.querySelector('.btn-connect');
+                    if (btn) btn.click();
+                }
+            });
+        });
+    })();
+</script>

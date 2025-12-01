@@ -1,0 +1,200 @@
+<%- include('includes/boiler.ejs') %>
+
+    <style>
+        /* Section Background */
+        .benefits-section {
+            background: #050505;
+            padding: 120px 0;
+            color: white;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Center Header */
+        .benefits-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .benefits-title {
+            font-size: 46px;
+            font-weight: 800;
+            transition: 0.3s ease;
+        }
+
+        /* Title Glow on Hover */
+        .benefits-title:hover {
+
+            color: #edff00;
+            text-shadow: 0 0 12px rgba(237, 255, 0, 0.5);
+
+            padding: 4px 16px;
+            border-radius: 10px;
+            transform: scale(1.03);
+        }
+
+        .benefits-sub {
+            color: #bfbfbf;
+            font-size: 16px;
+            max-width: 600px;
+            margin: 14px auto 22px;
+            line-height: 1.6;
+        }
+
+        /* Grid */
+        .benefits-grid {
+            height: 600px;
+            max-width: 1300px;
+            margin: auto;
+            margin-top: 50px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        /* Card */
+        .benefit-card {
+            text-align: center;
+            padding: 51px 25px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 20px;
+            transition: 0.3s ease;
+        }
+
+        /* Hover effect — yellow glow */
+        .benefit-card:hover {
+            border-color: #edff00;
+            box-shadow: 0 0 25px rgba(237, 255, 0, 0.25);
+            transform: translateY(-6px);
+        }
+
+        /* ICON BOX */
+        .benefit-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 16px;
+            background: #202020;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 18px;
+            transition: 0.3s ease;
+        }
+
+        .benefit-card:hover .benefit-icon {
+            background: #edff00;
+            box-shadow: 0 0 15px rgba(237, 255, 0, 0.6);
+        }
+
+        /* Icon Inside */
+        .benefit-icon i {
+            font-size: 30px;
+            color: #edff00;
+            transition: 0.3s ease;
+        }
+
+        /* Icon turns black on hover */
+        .benefit-card:hover .benefit-icon i {
+            color: black;
+        }
+
+        /* Benefit Title */
+        .benefit-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            transition: 0.3s ease;
+        }
+
+        /* Title glow on hover */
+        .benefit-card:hover .benefit-title {
+            color: #edff00;
+            text-shadow: 0 0 12px rgba(237, 255, 0, 0.5);
+        }
+
+        /* Benefit Description */
+        .benefit-desc {
+            color: #bfbfbf;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .benefits-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .benefits-title {
+                font-size: 36px;
+            }
+        }
+    </style>
+
+    <section class="benefits-section">
+        <div class="benefits-header">
+            <h1 class="benefits-title">Student Monitor Benefits</h1>
+            <p class="benefits-sub">
+                Perks so powerful you’ll never need manual uniform or ID checking again.
+                Seriously.
+            </p>
+        </div>
+
+        <div class="benefits-grid">
+
+            <!-- 1 -->
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fa-solid fa-infinity"></i></div>
+                <h3 class="benefit-title">Automated Checks</h3>
+                <p class="benefit-desc">Run unlimited uniform and ID verifications every day—fully automated and
+                    effortless.</p>
+            </div>
+
+            <!-- 2 -->
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fa-solid fa-bolt"></i></div>
+                <h3 class="benefit-title">Instant AI Detection</h3>
+                <p class="benefit-desc">Get results in seconds with real-time accuracy powered by advanced computer
+                    vision.</p>
+            </div>
+
+            <!-- 3 -->
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fa-solid fa-dollar-sign"></i></div>
+                <h3 class="benefit-title">Cost-Efficient Operation</h3>
+                <p class="benefit-desc">Reduce manpower, avoid human errors, and maintain a fixed predictable monitoring
+                    cost.</p>
+            </div>
+
+            <!-- 4 -->
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fa-solid fa-award"></i></div>
+                <h3 class="benefit-title">High Accuracy</h3>
+                <p class="benefit-desc">Enjoy top-tier AI performance that ensures consistent, reliable uniform & ID
+                    compliance.</p>
+            </div>
+
+            <!-- 5 -->
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fa-solid fa-expand"></i></div>
+                <h3 class="benefit-title">Scalable & Flexible</h3>
+                <p class="benefit-desc">Monitor one classroom—or an entire campus. Scale up or down anytime with ease.
+                </p>
+            </div>
+
+            <!-- 6 -->
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fa-solid fa-star"></i></div>
+                <h3 class="benefit-title">Secure & Private</h3>
+                <p class="benefit-desc">All detections, alerts, and reports are securely stored and built exclusively
+                    for your institution.</p>
+            </div>
+
+        </div>
+    </section>

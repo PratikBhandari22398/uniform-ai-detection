@@ -1,0 +1,603 @@
+<%- include('includes/boiler.ejs') %>
+    <%- include('includes/nav.ejs') %>
+
+        <!-- DETECT.EJS - Professional Detect UI (Black + Neon Yellow theme) -->
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;600;700;800&display=swap');
+
+            :root {
+                --bg: #050505;
+                --neon: #EDFF00;
+                --neon-2: #D4FF37;
+                --muted: #bfbfbf;
+                --card: rgba(255, 255, 255, 0.03);
+            }
+
+            body {
+                background: var(--bg);
+                color: #fff;
+                font-family: Inter, system-ui, -apple-system, sans-serif;
+            }
+
+            .detect-wrap {
+                max-width: 1400px;
+                margin: 36px auto;
+                padding: 28px;
+            }
+
+            /* Top hero */
+            .detect-hero {
+                display: flex;
+                gap: 24px;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 18px;
+            }
+
+            .detect-left {
+                flex: 1;
+                min-width: 300px;
+            }
+
+            .detect-eyebrow {
+                color: var(--neon-2);
+                font-weight: 800;
+                text-transform: uppercase;
+                font-size: 13px;
+                letter-spacing: .6px;
+                margin-bottom: 8px;
+            }
+
+            .detect-title {
+                font-size: clamp(22px, 3.6vw, 34px);
+                font-weight: 900;
+                margin: 0 0 8px;
+                color: #fff;
+            }
+
+            .detect-sub {
+                color: var(--muted);
+                max-width: 760px;
+                margin-bottom: 12px;
+            }
+
+            .cta-row {
+                display: flex;
+                gap: 12px;
+                align-items: center;
+                margin-top: 8px;
+            }
+
+            .btn {
+                padding: 10px 18px;
+                border-radius: 999px;
+                font-weight: 800;
+                cursor: pointer;
+                border: none;
+            }
+
+            .btn-primary {
+                background: var(--neon);
+                color: #050505;
+                box-shadow: 0 18px 60px rgba(237, 255, 0, 0.09);
+            }
+
+            .btn-ghost {
+                background: transparent;
+                color: var(--neon);
+                border: 1px solid rgba(237, 255, 0, 0.12);
+            }
+
+            /* Layout */
+            .detect-grid {
+                display: grid;
+                grid-template-columns: 1.1fr .75fr;
+                gap: 28px;
+                align-items: start;
+            }
+
+            /* Left panel: camera / upload */
+            .panel {
+                background: var(--card);
+                border: 1px solid rgba(255, 255, 255, 0.06);
+                border-radius: 14px;
+                padding: 18px;
+                position: relative;
+            }
+
+            .camera-area {
+                background: linear-gradient(180deg, #0b0b0b, #0a0a0a);
+                border-radius: 10px;
+                overflow: hidden;
+                height: 420px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            }
+
+            #video,
+            #previewImg {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
+            }
+
+            .camera-placeholder {
+                color: var(--muted);
+                font-size: 14px;
+                text-align: center;
+                padding: 24px;
+            }
+
+            .camera-overlay {
+                position: absolute;
+                inset: 12px;
+                pointer-events: none;
+            }
+
+            /* detection boxes (overlay) */
+            .box {
+                position: absolute;
+                border: 3px solid rgba(237, 255, 0, 0.92);
+                box-shadow: 0 8px 30px rgba(237, 255, 0, 0.12);
+                border-radius: 6px;
+                pointer-events: none;
+            }
+
+            .box .label {
+                position: absolute;
+                top: -26px;
+                left: 0;
+                font-weight: 800;
+                background: rgba(0, 0, 0, 0.75);
+                color: var(--neon);
+                padding: 6px 10px;
+                font-size: 13px;
+                border-radius: 8px;
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+            }
+
+            /* Controls */
+            .controls {
+                display: flex;
+                gap: 10px;
+                margin-top: 12px;
+                flex-wrap: wrap;
+            }
+
+            .file-input {
+                display: none;
+            }
+
+            .control-item {
+                display: flex;
+                gap: 12px;
+                align-items: center;
+                color: var(--muted);
+                font-size: 14px;
+            }
+
+            /* Right panel: results & stats */
+            .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                margin-top: 12px;
+            }
+
+            .stat {
+                background: rgba(255, 255, 255, 0.02);
+                border-radius: 10px;
+                padding: 12px;
+                text-align: center;
+                border: 1px solid rgba(255, 255, 255, 0.04);
+            }
+
+            .stat .num {
+                font-weight: 900;
+                color: var(--neon);
+                font-size: 20px;
+            }
+
+            .stat .label {
+                color: var(--muted);
+                font-size: 13px;
+            }
+
+            .result-list {
+                margin-top: 14px;
+                max-height: 360px;
+                overflow: auto;
+                padding-right: 6px;
+            }
+
+            .result-item {
+                display: flex;
+                gap: 10px;
+                align-items: center;
+                padding: 10px;
+                border-bottom: 1px dashed rgba(255, 255, 255, 0.04);
+            }
+
+            .result-item .swatch {
+                width: 12px;
+                height: 12px;
+                border-radius: 3px;
+                background: var(--neon);
+                flex: 0 0 12px;
+            }
+
+            .result-item .meta {
+                font-size: 14px;
+                color: #fff;
+                font-weight: 700;
+            }
+
+            .result-item .sub {
+                color: var(--muted);
+                font-size: 13px;
+                margin-top: 4px;
+            }
+
+            /* small helpers */
+            .muted {
+                color: var(--muted);
+            }
+
+            .tiny {
+                font-size: 12px;
+                color: var(--muted);
+            }
+
+            /* Footer actions */
+            .panel-footer {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-top: 12px;
+                gap: 12px;
+                flex-wrap: wrap;
+            }
+
+            /* Responsive */
+            @media (max-width: 1000px) {
+                .detect-grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .camera-area {
+                    height: 320px;
+                }
+            }
+        </style>
+
+        <section class="detect-wrap">
+            <div class="detect-hero">
+                <div class="detect-left">
+                    <div class="detect-eyebrow">Live Detection</div>
+                    <h2 class="detect-title">Real-time Uniform & ID Monitoring</h2>
+                    <p class="detect-sub">Use a camera feed or upload an image to detect uniform compliance, ID presence
+                        and get instant alerts. This interface is designed to be production-ready and visually
+                        consistent with your site theme.</p>
+
+                    <div class="cta-row">
+                        <button class="btn btn-primary" id="runDetectBtn"><i class="fa-solid fa-bolt"></i>&nbsp;Run
+                            Detection</button>
+                        <label class="btn btn-ghost" id="uploadLabel"><i class="fa-solid fa-upload"></i>&nbsp;Upload
+                            Image
+                            <input type="file" id="fileInput" class="file-input" accept="image/*">
+                        </label>
+                        <button class="btn btn-ghost" id="startCamBtn"><i class="fa-solid fa-camera"></i>&nbsp;Start
+                            Camera</button>
+                        <button class="btn btn-ghost" id="stopCamBtn" disabled><i
+                                class="fa-solid fa-square"></i>&nbsp;Stop Camera</button>
+                    </div>
+                </div>
+
+                <div class="detect-right tiny">
+                    <div style="text-align:right;">
+                        <span class="muted">Logged in as</span><br>
+                        <strong style="color:var(--neon)">
+                            <%= (typeof user !=='undefined' && user) ? user.username : 'Guest' %>
+                        </strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detect-grid">
+                <!-- LEFT: Camera / Image -->
+                <div class="panel">
+                    <div class="camera-area" id="cameraArea">
+                        <video id="video" autoplay muted playsinline style="display:none;"></video>
+                        <img id="previewImg" src="" alt="preview" style="display:none;">
+                        <div class="camera-placeholder" id="cameraPlaceholder">
+                            <div style="font-weight:800;font-size:18px;color:#fff;margin-bottom:8px;">No active feed
+                            </div>
+                            <div class="muted">Start camera or upload an image to begin detection</div>
+                        </div>
+
+                        <!-- overlay for boxes -->
+                        <div class="camera-overlay" id="overlay"></div>
+                    </div>
+
+                    <!-- controls -->
+                    <div class="controls">
+                        <div class="control-item">
+                            <input type="checkbox" id="drawBoxes" checked>
+                            <label for="drawBoxes" class="muted">Draw Boxes</label>
+                        </div>
+                        <div class="control-item">
+                            <label class="muted">Confidence</label>
+                            <input type="range" id="confidenceRange" min="10" max="100" value="60" style="width:150px;">
+                        </div>
+                    </div>
+
+                    <div class="panel-footer">
+                        <div class="tiny muted">Model: <strong>UniformCheck-V3</strong> · Inference: <span
+                                id="inferTime">—</span></div>
+                        <div>
+                            <button class="btn btn-ghost" id="clearBtn"><i
+                                    class="fa-solid fa-trash"></i>&nbsp;Clear</button>
+                            <button class="btn btn-primary" id="snapshotBtn"><i
+                                    class="fa-solid fa-camera-retro"></i>&nbsp;Snapshot</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT: Stats & Results -->
+                <div class="panel">
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <div>
+                            <div class="tiny muted">Session Stats</div>
+                            <h3 style="margin:0;color:#fff">Detections & Insights</h3>
+                        </div>
+                        <div class="tiny muted">Live</div>
+                    </div>
+
+                    <!-- stats -->
+                    <div class="stats-grid">
+                        <div class="stat">
+                            <div class="num" id="statTotal">0</div>
+                            <div class="label">Total Processed</div>
+                        </div>
+                        <div class="stat">
+                            <div class="num" id="statAlerts">0</div>
+                            <div class="label">Alerts</div>
+                        </div>
+                        <div class="stat">
+                            <div class="num" id="statCompliant">0</div>
+                            <div class="label">Compliant</div>
+                        </div>
+                        <div class="stat">
+                            <div class="num" id="statNonCompliant">0</div>
+                            <div class="label">Non-Compliant</div>
+                        </div>
+                    </div>
+
+                    <!-- recent detections list -->
+                    <div class="result-list" id="resultList" aria-live="polite">
+                        <!-- items appended here -->
+                    </div>
+
+                    <div
+                        style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between;">
+                        <div class="tiny muted">Auto-alerts: <strong id="autoAlerts">ON</strong></div>
+                        <div style="display:flex;gap:8px;">
+                            <button class="btn btn-ghost" id="exportBtn"><i
+                                    class="fa-solid fa-file-export"></i>&nbsp;Export</button>
+                            <button class="btn btn-ghost" id="settingsBtn"><i
+                                    class="fa-solid fa-gear"></i>&nbsp;Settings</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Optional: include FontAwesome if not in boiler -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+        <script>
+            // Simple client-side interactions & mock detection logic
+            const fileInput = document.getElementById('fileInput');
+            const previewImg = document.getElementById('previewImg');
+            const cameraPlaceholder = document.getElementById('cameraPlaceholder');
+            const video = document.getElementById('video');
+            const overlay = document.getElementById('overlay');
+            const startCamBtn = document.getElementById('startCamBtn');
+            const stopCamBtn = document.getElementById('stopCamBtn');
+            const runDetectBtn = document.getElementById('runDetectBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const snapshotBtn = document.getElementById('snapshotBtn');
+
+            const statTotal = document.getElementById('statTotal');
+            const statAlerts = document.getElementById('statAlerts');
+            const statCompliant = document.getElementById('statCompliant');
+            const statNonCompliant = document.getElementById('statNonCompliant');
+            const resultList = document.getElementById('resultList');
+            const inferTime = document.getElementById('inferTime');
+
+            let stream = null;
+            let processing = false;
+            let stats = { total: 0, alerts: 0, comp: 0, non: 0 };
+
+            // Helper: clear overlay boxes and results
+            function clearDetections() {
+                overlay.innerHTML = '';
+                resultList.innerHTML = '';
+                stats = { total: 0, alerts: 0, comp: 0, non: 0 };
+                updateStats();
+                inferTime.textContent = '—';
+            }
+
+            clearBtn.addEventListener('click', clearDetections);
+
+            // File upload preview
+            fileInput.addEventListener('change', (e) => {
+                const f = e.target.files[0];
+                if (!f) return;
+                const url = URL.createObjectURL(f);
+                previewImg.src = url;
+                previewImg.style.display = 'block';
+                video.style.display = 'none';
+                cameraPlaceholder.style.display = 'none';
+                overlay.innerHTML = '';
+            });
+
+            // Start camera
+            startCamBtn.addEventListener('click', async () => {
+                try {
+                    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
+                    video.srcObject = stream;
+                    video.style.display = 'block';
+                    previewImg.style.display = 'none';
+                    cameraPlaceholder.style.display = 'none';
+                    startCamBtn.disabled = true;
+                    stopCamBtn.disabled = false;
+                } catch (err) {
+                    alert('Camera access denied or not available.');
+                    console.error(err);
+                }
+            });
+
+            // Stop camera
+            stopCamBtn.addEventListener('click', () => {
+                if (stream) {
+                    stream.getTracks().forEach(t => t.stop());
+                    stream = null;
+                }
+                video.style.display = 'none';
+                previewImg.style.display = 'none';
+                cameraPlaceholder.style.display = 'block';
+                startCamBtn.disabled = false;
+                stopCamBtn.disabled = true;
+            });
+
+            // Snapshot (saves current visible frame as image preview)
+            snapshotBtn.addEventListener('click', () => {
+                const canvas = document.createElement('canvas');
+                const w = video.videoWidth || previewImg.naturalWidth || 640;
+                const h = video.videoHeight || previewImg.naturalHeight || 480;
+                canvas.width = w; canvas.height = h;
+                const ctx = canvas.getContext('2d');
+                if (video.style.display === 'block') ctx.drawImage(video, 0, 0, w, h);
+                else if (previewImg.style.display === 'block') ctx.drawImage(previewImg, 0, 0, w, h);
+                else return alert('No source available to snapshot.');
+                const data = canvas.toDataURL('image/jpeg');
+                previewImg.src = data;
+                previewImg.style.display = 'block';
+                video.style.display = 'none';
+            });
+
+            // Mock detection algorithm - generates random boxes & results to demo UI
+            function mockDetect() {
+                overlay.innerHTML = '';
+                const draw = document.getElementById('drawBoxes').checked;
+                // decide a random number of detections 0..4
+                const count = Math.floor(Math.random() * 4) + 1;
+                const results = [];
+                const area = document.getElementById('cameraArea').getBoundingClientRect();
+
+                for (let i = 0; i < count; i++) {
+                    const w = Math.max(60, Math.round(Math.random() * (area.width * 0.4)));
+                    const h = Math.max(60, Math.round(Math.random() * (area.height * 0.4)));
+                    const x = Math.round(Math.random() * (area.width - w));
+                    const y = Math.round(Math.random() * (area.height - h));
+                    const score = (Math.random() * 0.5 + 0.5).toFixed(2); // 0.50 - 1.00
+                    const compliant = Math.random() > 0.35; // 65% chance compliant
+                    results.push({ x, y, w, h, score, compliant });
+                    if (draw) {
+                        const box = document.createElement('div');
+                        box.className = 'box';
+                        box.style.left = x + 'px';
+                        box.style.top = y + 'px';
+                        box.style.width = w + 'px';
+                        box.style.height = h + 'px';
+                        const label = document.createElement('div');
+                        label.className = 'label';
+                        label.textContent = `${compliant ? 'Compliant' : 'Alert'} · ${Math.round(score * 100)}%`;
+                        box.appendChild(label);
+                        overlay.appendChild(box);
+                    }
+                }
+                return results;
+            }
+
+            // Update stats & result list
+            function pushResults(results) {
+                results.forEach(r => {
+                    stats.total += 1;
+                    if (r.compliant) stats.comp += 1; else { stats.non += 1; stats.alerts += 1; }
+                    const item = document.createElement('div');
+                    item.className = 'result-item';
+                    item.innerHTML = `<div class="swatch"></div>
+                        <div style="flex:1;">
+                          <div class="meta">${r.compliant ? 'Compliant' : 'Non-Compliant'} • ${Math.round(r.score * 100)}%</div>
+                          <div class="sub">Detected at ${new Date().toLocaleTimeString()}</div>
+                        </div>
+                        <div style="min-width:54px;text-align:right;" class="tiny muted">${r.w}×${r.h}</div>`;
+                    resultList.insertBefore(item, resultList.firstChild);
+                });
+                updateStats();
+            }
+
+            function updateStats() {
+                statTotal.textContent = stats.total;
+                statAlerts.textContent = stats.alerts;
+                statCompliant.textContent = stats.comp;
+                statNonCompliant.textContent = stats.non;
+            }
+
+            // Run detection (simulated). In production replace with API / model call
+            runDetectBtn.addEventListener('click', async () => {
+                if (processing) return;
+                processing = true;
+                runDetectBtn.disabled = true;
+                const start = performance.now();
+
+                // simulate network/model delay (0.2s - 1s)
+                const delay = 200 + Math.random() * 800;
+                await new Promise(r => setTimeout(r, delay));
+
+                // get mock results
+                const results = mockDetect();
+                pushResults(results);
+
+                const elapsed = Math.round(performance.now() - start);
+                inferTime.textContent = `${elapsed} ms`;
+                processing = false;
+                runDetectBtn.disabled = false;
+            });
+
+            // clear overlay on page load
+            clearDetections();
+
+            // simple export: download results list as CSV
+            document.getElementById('exportBtn').addEventListener('click', () => {
+                let csv = 'status,confidence,time\\n';
+                const items = resultList.querySelectorAll('.result-item');
+                items.forEach(it => {
+                    const status = it.querySelector('.meta').textContent.replace(',', '');
+                    const timeTxt = it.querySelector('.sub').textContent.replace('Detected at ', '');
+                    csv += `${status},,${timeTxt}\\n`;
+                });
+                const blob = new Blob([csv], { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url; a.download = 'detections.csv'; a.click();
+                URL.revokeObjectURL(url);
+            });
+
+            // settings: toggle auto-alerts (demo)
+            document.getElementById('settingsBtn').addEventListener('click', () => {
+                const node = document.getElementById('autoAlerts');
+                node.textContent = node.textContent === 'ON' ? 'OFF' : 'ON';
+            });
+
+            // keyboard: press "D" to simulate detect
+            document.addEventListener('keydown', (e) => {
+                if (e.key.toLowerCase() === 'd') runDetectBtn.click();
+            });
+        </script>
