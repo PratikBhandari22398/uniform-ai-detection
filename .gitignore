@@ -1,11 +1,21 @@
-venv/
-**/venv/
+# Node
 node_modules/
-.DS_Store
-Thumbs.db
-.vscode/
-.idea/
-__pycache__/
-*.pyc
+
+# Environment
 .env
-ml_service/keras_model.h5
+
+# Python
+venv/
+__pycache__/
+
+# AI models
+*.h5
+tfjs_model/
+
+# Uploads
+public/uploads/
+
+# Editor temp files
+*.swp
+
+labels.txt

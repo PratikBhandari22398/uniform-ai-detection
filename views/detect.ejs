@@ -1,603 +1,596 @@
 <%- include('includes/boiler.ejs') %>
-    <%- include('includes/nav.ejs') %>
+<%- include('includes/nav.ejs') %>
 
-        <!-- DETECT.EJS - Professional Detect UI (Black + Neon Yellow theme) -->
-        <style>
-            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;600;700;800&display=swap');
+<style>
+  :root{
+    --bg: #050505;
+    --neon: #EDFF00;
+    --neon-soft: #dfff4d;
+    --muted: #bfbfbf;
+    --card: rgba(255,255,255,0.03);
+    --card-strong: rgba(255,255,255,0.06);
+    --danger: #FF3B4F;
+    --success: #00FF88;
+    --accent: #3b82f6;
+    --accent-2: #4dd0e1;
+  }
 
-            :root {
-                --bg: #050505;
-                --neon: #EDFF00;
-                --neon-2: #D4FF37;
-                --muted: #bfbfbf;
-                --card: rgba(255, 255, 255, 0.03);
-            }
+  body{ background:var(--bg); color:#fff; font-family:Inter, system-ui, -apple-system, sans-serif; }
 
-            body {
-                background: var(--bg);
-                color: #fff;
-                font-family: Inter, system-ui, -apple-system, sans-serif;
-            }
+  main.detect-page { max-width:1240px; margin:32px auto 40px; padding:0 20px 20px; }
 
-            .detect-wrap {
-                max-width: 1400px;
-                margin: 36px auto;
-                padding: 28px;
-            }
+  /* header / hero strip (card style consistent with other pages) */
+  .detect-header {
+    display:flex; align-items:center; justify-content:space-between; gap:20px;
+    padding:16px 18px; border-radius:16px;
+    background: radial-gradient(circle at top left, rgba(237,255,0,0.04), rgba(255,255,255,0.01));
+    border:1px solid rgba(255,255,255,0.06);
+    box-shadow:0 20px 60px rgba(0,0,0,0.55);
+    margin-bottom:22px;
+  }
 
-            /* Top hero */
-            .detect-hero {
-                display: flex;
-                gap: 24px;
-                align-items: center;
-                justify-content: space-between;
-                margin-bottom: 18px;
-            }
+  .detect-header-left { max-width:720px; }
+  .detect-eyebrow { font-size:11px; text-transform:uppercase; letter-spacing:.18em; color:var(--muted); font-weight:700; margin-bottom:6px; display:inline-flex; gap:6px; align-items:center;}
+  .detect-eyebrow::before { content:""; width:18px; height:2px; border-radius:999px; background:linear-gradient(90deg, transparent, var(--neon), transparent); opacity:.7; }
+  .title { font-weight:900; font-size:26px; margin:0; }
+  .title span { color:var(--neon); }
+  .subtitle { color:var(--muted); margin-top:6px; max-width:760px; font-size:14px; line-height:1.6; }
+  .detect-header-right { text-align:right; font-size:13px; }
+  .detect-header-right strong { color:var(--neon); }
 
-            .detect-left {
-                flex: 1;
-                min-width: 300px;
-            }
+  .main-grid { display:grid; grid-template-columns: 1.1fr .8fr; gap:22px; }
 
-            .detect-eyebrow {
-                color: var(--neon-2);
-                font-weight: 800;
-                text-transform: uppercase;
-                font-size: 13px;
-                letter-spacing: .6px;
-                margin-bottom: 8px;
-            }
+  .card {
+    background:linear-gradient(145deg, rgba(255,255,255,0.03), rgba(0,0,0,0.85));
+    border:1px solid rgba(255,255,255,0.06);
+    border-radius:18px; padding:16px 16px 18px;
+    box-shadow:0 18px 50px rgba(0,0,0,0.75);
+  }
 
-            .detect-title {
-                font-size: clamp(22px, 3.6vw, 34px);
-                font-weight: 900;
-                margin: 0 0 8px;
-                color: #fff;
-            }
+  .card-header-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
 
-            .detect-sub {
-                color: var(--muted);
-                max-width: 760px;
-                margin-bottom: 12px;
-            }
+  .camera-area {
+    background:radial-gradient(circle at top, #202020, #050505);
+    border-radius:14px; height:440px;
+    display:flex; align-items:center; justify-content:center;
+    position:relative; overflow:hidden; border:1px solid rgba(255,255,255,0.08);
+  }
 
-            .cta-row {
-                display: flex;
-                gap: 12px;
-                align-items: center;
-                margin-top: 8px;
-            }
+  video, img.preview { width:100%; height:100%; object-fit:contain; display:block; background:#050505; }
+  .placeholder { color:var(--muted); text-align:center; padding:8px; }
 
-            .btn {
-                padding: 10px 18px;
-                border-radius: 999px;
-                font-weight: 800;
-                cursor: pointer;
-                border: none;
-            }
+  .overlay { position:absolute; inset:10px; pointer-events:none; }
 
-            .btn-primary {
-                background: var(--neon);
-                color: #050505;
-                box-shadow: 0 18px 60px rgba(237, 255, 0, 0.09);
-            }
+  .controls { display:flex; gap:10px; margin-top:12px; flex-wrap:wrap; align-items:center; }
 
-            .btn-ghost {
-                background: transparent;
-                color: var(--neon);
-                border: 1px solid rgba(237, 255, 0, 0.12);
-            }
+  .btn { cursor:pointer; border:none; padding:10px 22px; border-radius:999px; font-weight:800; font-size:14px; display:inline-flex; gap:6px; transition: all .18s ease; user-select:none; }
+  .btn-primary { background:var(--neon); color:#000; box-shadow:0 10px 28px rgba(237,255,0,0.35); }
+  .btn-primary:hover { background:var(--neon-soft); transform:translateY(-1px) scale(1.03); box-shadow:0 16px 40px rgba(237,255,0,0.5); }
+  .btn-secondary { background:rgba(255,255,255,0.02); color:#fdfdfd; border:1px solid rgba(255,255,255,0.06); }
+  .btn-mini { padding:6px 14px; font-size:13px; }
 
-            /* Layout */
-            .detect-grid {
-                display: grid;
-                grid-template-columns: 1.1fr .75fr;
-                gap: 28px;
-                align-items: start;
-            }
+  .btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; box-shadow:none; }
 
-            /* Left panel: camera / upload */
-            .panel {
-                background: var(--card);
-                border: 1px solid rgba(255, 255, 255, 0.06);
-                border-radius: 14px;
-                padding: 18px;
-                position: relative;
-            }
+  .stats { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:12px; }
+  .stat { padding:10px 10px 12px; border-radius:12px; background:rgba(255,255,255,0.02); text-align:center; border:1px solid rgba(255,255,255,0.04); }
+  .num { color:var(--neon); font-weight:900; font-size:20px; }
+  .label { color:var(--muted); font-size:12px; }
 
-            .camera-area {
-                background: linear-gradient(180deg, #0b0b0b, #0a0a0a);
-                border-radius: 10px;
-                overflow: hidden;
-                height: 420px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                position: relative;
-                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-            }
+  .results { margin-top:12px; max-height:300px; overflow:auto; padding-right:6px; }
+  .result-item { display:flex; gap:8px; align-items:center; padding:8px 4px; border-bottom:1px dashed rgba(255,255,255,0.03); }
+  .result-item .dot { width:12px; height:12px; border-radius:3px; background:var(--neon); flex:0 0 12px; }
 
-            #video,
-            #previewImg {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                display: block;
-            }
+  .muted { color:var(--muted); }
+  .tiny  { font-size:12px; color:var(--muted); }
 
-            .camera-placeholder {
-                color: var(--muted);
-                font-size: 14px;
-                text-align: center;
-                padding: 24px;
-            }
+  .history-heading { margin-top:16px; font-size:13px; color:var(--muted); font-weight:600; }
 
-            .camera-overlay {
-                position: absolute;
-                inset: 12px;
-                pointer-events: none;
-            }
+  .controls .file-input { display: none; }
 
-            /* detection boxes (overlay) */
-            .box {
-                position: absolute;
-                border: 3px solid rgba(237, 255, 0, 0.92);
-                box-shadow: 0 8px 30px rgba(237, 255, 0, 0.12);
-                border-radius: 6px;
-                pointer-events: none;
-            }
+  /* small toast */
+  .toast {
+    position:fixed; right:18px; bottom:18px; background:rgba(0,0,0,0.6);
+    color:#fff; padding:10px 14px; border-radius:10px; font-weight:700;
+    box-shadow:0 8px 28px rgba(0,0,0,0.6);
+    z-index:9999; pointer-events:none;
+  }
 
-            .box .label {
-                position: absolute;
-                top: -26px;
-                left: 0;
-                font-weight: 800;
-                background: rgba(0, 0, 0, 0.75);
-                color: var(--neon);
-                padding: 6px 10px;
-                font-size: 13px;
-                border-radius: 8px;
-                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-            }
+  /* responsive */
+  @media (max-width:1000px){ main.detect-page{margin-top:24px;} .main-grid{grid-template-columns:1fr;} .camera-area{height:360px;} }
+  @media (max-width:768px){ .detect-header{flex-direction:column;align-items:flex-start;} .detect-header-right{text-align:left;} .camera-area{height:320px;} }
+  @media (max-width:520px){ main.detect-page{padding:0 14px 18px;} .detect-header{padding:14px;border-radius:14px;} .title{font-size:22px;} .camera-area{height:260px;} .controls .btn{flex:1 1 48%;} #runDetectBtn{flex:1 1 100%;} }
+</style>
 
-            /* Controls */
-            .controls {
-                display: flex;
-                gap: 10px;
-                margin-top: 12px;
-                flex-wrap: wrap;
-            }
+<main class="detect-page" aria-live="polite">
+  <header class="detect-header">
+    <div class="detect-header-left">
+      <div class="detect-eyebrow">Detection Console</div>
+      <h1 class="title">Image Detection — <span>Uniform &amp; ID Check</span></h1>
+      <p class="subtitle">
+        Upload an image or start your camera. Our AI will classify whether the student is
+        <strong>compliant</strong> with uniform / ID rules — built for teachers, admins and security staff.
+      </p>
+    </div>
 
-            .file-input {
-                display: none;
-            }
+    <div class="detect-header-right" aria-hidden="false">
+      <div class="tiny muted">Logged in as</div>
+      <div style="font-size:14px; margin-top:2px;">
+        <strong><%= (typeof user !== 'undefined' && user) ? user.username : 'Guest' %></strong>
+      </div>
+      <div style="margin-top:10px;">
+        <a href="/teacher-login" class="btn btn-primary btn-mini" aria-label="Teacher login">
+          <i class="fa-solid fa-chalkboard-user"></i> Teacher Login
+        </a>
+      </div>
+    </div>
+  </header>
 
-            .control-item {
-                display: flex;
-                gap: 12px;
-                align-items: center;
-                color: var(--muted);
-                font-size: 14px;
-            }
+  <section class="main-grid" role="region" aria-label="Detection workspace">
+    <!-- left -->
+    <div class="card" aria-label="camera card">
+      <div class="card-header-row">
+        <div class="tiny muted">Input Source</div>
+        <div class="tiny muted">Inference: <span id="inferTime">—</span></div>
+      </div>
 
-            /* Right panel: results & stats */
-            .stats-grid {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
-                margin-top: 12px;
-            }
+      <div class="camera-area" id="cameraArea" aria-live="polite" aria-atomic="true">
+        <video id="video" autoplay muted playsinline style="display:none" aria-hidden="true"></video>
+        <img class="preview" id="previewImg" src="" alt="uploaded preview" style="display:none" />
+        <div class="placeholder" id="cameraPlaceholder" role="status">
+          <div style="font-weight:800;font-size:18px;color:#fff;margin-bottom:6px">No active feed</div>
+          <div class="muted">Start camera or upload an image to begin detection</div>
+        </div>
+        <div class="overlay" id="overlay" aria-hidden="true"></div>
+      </div>
 
-            .stat {
-                background: rgba(255, 255, 255, 0.02);
-                border-radius: 10px;
-                padding: 12px;
-                text-align: center;
-                border: 1px solid rgba(255, 255, 255, 0.04);
-            }
+      <div class="controls" role="group" aria-label="detection controls">
+        <label class="btn btn-secondary btn-mini" for="fileInput">
+          <i class="fa-solid fa-upload"></i> Upload Image
+          <input id="fileInput" class="file-input" type="file" accept="image/*" aria-label="Upload image">
+        </label>
 
-            .stat .num {
-                font-weight: 900;
-                color: var(--neon);
-                font-size: 20px;
-            }
+        <button id="snapshotBtn" class="btn btn-secondary btn-mini" title="Take a snapshot from the camera">
+          <i class="fa-solid fa-camera"></i> Snapshot
+        </button>
 
-            .stat .label {
-                color: var(--muted);
-                font-size: 13px;
-            }
+        <button id="startCamBtn" class="btn btn-secondary btn-mini" aria-pressed="false">
+          <i class="fa-solid fa-video"></i> Start Camera
+        </button>
 
-            .result-list {
-                margin-top: 14px;
-                max-height: 360px;
-                overflow: auto;
-                padding-right: 6px;
-            }
+        <button id="stopCamBtn" class="btn btn-secondary btn-mini" disabled aria-pressed="false">
+          <i class="fa-solid fa-stop"></i> Stop Camera
+        </button>
 
-            .result-item {
-                display: flex;
-                gap: 10px;
-                align-items: center;
-                padding: 10px;
-                border-bottom: 1px dashed rgba(255, 255, 255, 0.04);
-            }
+        <button id="toggleAutoBtn" class="btn btn-secondary btn-mini" aria-pressed="true">
+          <i class="fa-solid fa-bolt"></i> Auto-frames: <span id="autoFrames" style="margin-left:6px;">ON</span>
+        </button>
 
-            .result-item .swatch {
-                width: 12px;
-                height: 12px;
-                border-radius: 3px;
-                background: var(--neon);
-                flex: 0 0 12px;
-            }
+        <button id="runDetectBtn" class="btn btn-primary" title="Run detection on the current image or frame">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> Run Detection
+        </button>
+      </div>
 
-            .result-item .meta {
-                font-size: 14px;
-                color: #fff;
-                font-weight: 700;
-            }
+      <div style="margin-top:10px" class="tiny muted">Tip: Press <strong>D</strong> to trigger detection quickly.</div>
+    </div>
 
-            .result-item .sub {
-                color: var(--muted);
-                font-size: 13px;
-                margin-top: 4px;
-            }
+    <!-- right -->
+    <div class="card" aria-label="session stats and history">
+      <div class="card-header-row">
+        <div>
+          <div class="tiny muted">Session Stats</div>
+          <h3 style="margin:2px 0 0 0; font-size:18px;">Detections Overview</h3>
+        </div>
+        <div class="tiny muted">Live</div>
+      </div>
 
-            /* small helpers */
-            .muted {
-                color: var(--muted);
-            }
+      <div class="stats" role="list" aria-label="session statistics">
+        <div class="stat" role="listitem">
+          <div class="num" id="statTotal">0</div>
+          <div class="label">Processed</div>
+        </div>
+        <div class="stat" role="listitem">
+          <div class="num" id="statAlerts">0</div>
+          <div class="label">Alerts</div>
+        </div>
+        <div class="stat" role="listitem">
+          <div class="num" id="statCompliant">0</div>
+          <div class="label">Compliant</div>
+        </div>
+        <div class="stat" role="listitem">
+          <div class="num" id="statNonCompliant">0</div>
+          <div class="label">Non-Compliant</div>
+        </div>
+      </div>
 
-            .tiny {
-                font-size: 12px;
-                color: var(--muted);
-            }
+      <div class="results" id="resultList" aria-live="polite" aria-atomic="true"></div>
 
-            /* Footer actions */
-            .panel-footer {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-top: 12px;
-                gap: 12px;
-                flex-wrap: wrap;
-            }
-
-            /* Responsive */
-            @media (max-width: 1000px) {
-                .detect-grid {
-                    grid-template-columns: 1fr;
-                }
-
-                .camera-area {
-                    height: 320px;
-                }
-            }
-        </style>
-
-        <section class="detect-wrap">
-            <div class="detect-hero">
-                <div class="detect-left">
-                    <div class="detect-eyebrow">Live Detection</div>
-                    <h2 class="detect-title">Real-time Uniform & ID Monitoring</h2>
-                    <p class="detect-sub">Use a camera feed or upload an image to detect uniform compliance, ID presence
-                        and get instant alerts. This interface is designed to be production-ready and visually
-                        consistent with your site theme.</p>
-
-                    <div class="cta-row">
-                        <button class="btn btn-primary" id="runDetectBtn"><i class="fa-solid fa-bolt"></i>&nbsp;Run
-                            Detection</button>
-                        <label class="btn btn-ghost" id="uploadLabel"><i class="fa-solid fa-upload"></i>&nbsp;Upload
-                            Image
-                            <input type="file" id="fileInput" class="file-input" accept="image/*">
-                        </label>
-                        <button class="btn btn-ghost" id="startCamBtn"><i class="fa-solid fa-camera"></i>&nbsp;Start
-                            Camera</button>
-                        <button class="btn btn-ghost" id="stopCamBtn" disabled><i
-                                class="fa-solid fa-square"></i>&nbsp;Stop Camera</button>
-                    </div>
-                </div>
-
-                <div class="detect-right tiny">
-                    <div style="text-align:right;">
-                        <span class="muted">Logged in as</span><br>
-                        <strong style="color:var(--neon)">
-                            <%= (typeof user !=='undefined' && user) ? user.username : 'Guest' %>
-                        </strong>
-                    </div>
-                </div>
+      <div class="history-heading"><strong>History</strong> – Last 10 detections</div>
+      <div class="results" id="historyList" aria-live="polite">
+        <% if (typeof history !== 'undefined' && history && history.length) { %>
+          <% history.slice().reverse().slice(0,10).forEach(function(h) { %>
+            <div class="result-item">
+              <div class="dot" style="background:<%= h.isCompliant ? '--success' : '--danger' %>"></div>
+              <div style="flex:1">
+                <div style="font-weight:700"><%= h.label %> — <%= h.isCompliant ? 'Compliant' : 'Non-Compliant' %></div>
+                <div class="tiny muted">By: <%= h.username %> • <%= new Date(h.createdAt).toLocaleString() %></div>
+              </div>
+              <div class="tiny muted"><%= (h.confidence * 100).toFixed(1) %>%</div>
             </div>
+          <% }) %>
+        <% } else { %>
+          <div class="tiny muted" style="margin-top:6px;">No history saved yet.</div>
+        <% } %>
+      </div>
 
-            <div class="detect-grid">
-                <!-- LEFT: Camera / Image -->
-                <div class="panel">
-                    <div class="camera-area" id="cameraArea">
-                        <video id="video" autoplay muted playsinline style="display:none;"></video>
-                        <img id="previewImg" src="" alt="preview" style="display:none;">
-                        <div class="camera-placeholder" id="cameraPlaceholder">
-                            <div style="font-weight:800;font-size:18px;color:#fff;margin-bottom:8px;">No active feed
-                            </div>
-                            <div class="muted">Start camera or upload an image to begin detection</div>
-                        </div>
+      <div style="display:flex;gap:8px;margin-top:12px;align-items:center;justify-content:space-between">
+        <div class="tiny muted">Auto-frames: <strong id="autoFramesState">ON</strong></div>
+        <div style="display:flex;gap:8px">
+          <button id="exportBtn" class="btn btn-secondary btn-mini"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
+          <button id="clearBtn" class="btn btn-secondary btn-mini"><i class="fa-solid fa-eraser"></i> Clear</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
 
-                        <!-- overlay for boxes -->
-                        <div class="camera-overlay" id="overlay"></div>
-                    </div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
-                    <!-- controls -->
-                    <div class="controls">
-                        <div class="control-item">
-                            <input type="checkbox" id="drawBoxes" checked>
-                            <label for="drawBoxes" class="muted">Draw Boxes</label>
-                        </div>
-                        <div class="control-item">
-                            <label class="muted">Confidence</label>
-                            <input type="range" id="confidenceRange" min="10" max="100" value="60" style="width:150px;">
-                        </div>
-                    </div>
+<!-- small toast helper -->
+<div id="toast" class="toast" style="display:none" role="status" aria-live="polite"></div>
 
-                    <div class="panel-footer">
-                        <div class="tiny muted">Model: <strong>UniformCheck-V3</strong> · Inference: <span
-                                id="inferTime">—</span></div>
-                        <div>
-                            <button class="btn btn-ghost" id="clearBtn"><i
-                                    class="fa-solid fa-trash"></i>&nbsp;Clear</button>
-                            <button class="btn btn-primary" id="snapshotBtn"><i
-                                    class="fa-solid fa-camera-retro"></i>&nbsp;Snapshot</button>
-                        </div>
-                    </div>
-                </div>
+<script>
+  // Refs
+  const fileInput         = document.getElementById('fileInput');
+  const previewImg        = document.getElementById('previewImg');
+  const video             = document.getElementById('video');
+  const cameraPlaceholder = document.getElementById('cameraPlaceholder');
+  const overlay           = document.getElementById('overlay');
 
-                <!-- RIGHT: Stats & Results -->
-                <div class="panel">
-                    <div style="display:flex;justify-content:space-between;align-items:center;">
-                        <div>
-                            <div class="tiny muted">Session Stats</div>
-                            <h3 style="margin:0;color:#fff">Detections & Insights</h3>
-                        </div>
-                        <div class="tiny muted">Live</div>
-                    </div>
+  const startCamBtn   = document.getElementById('startCamBtn');
+  const stopCamBtn    = document.getElementById('stopCamBtn');
+  const runDetectBtn  = document.getElementById('runDetectBtn');
+  const snapshotBtn   = document.getElementById('snapshotBtn');
+  const clearBtn      = document.getElementById('clearBtn');
+  const exportBtn     = document.getElementById('exportBtn');
+  const toggleAutoBtn = document.getElementById('toggleAutoBtn');
 
-                    <!-- stats -->
-                    <div class="stats-grid">
-                        <div class="stat">
-                            <div class="num" id="statTotal">0</div>
-                            <div class="label">Total Processed</div>
-                        </div>
-                        <div class="stat">
-                            <div class="num" id="statAlerts">0</div>
-                            <div class="label">Alerts</div>
-                        </div>
-                        <div class="stat">
-                            <div class="num" id="statCompliant">0</div>
-                            <div class="label">Compliant</div>
-                        </div>
-                        <div class="stat">
-                            <div class="num" id="statNonCompliant">0</div>
-                            <div class="label">Non-Compliant</div>
-                        </div>
-                    </div>
+  const statTotal        = document.getElementById('statTotal');
+  const statAlerts       = document.getElementById('statAlerts');
+  const statCompliant    = document.getElementById('statCompliant');
+  const statNonCompliant = document.getElementById('statNonCompliant');
+  const resultList       = document.getElementById('resultList');
+  const inferTime        = document.getElementById('inferTime');
+  const autoFramesNode   = document.getElementById('autoFrames');
+  const autoFramesState  = document.getElementById('autoFramesState');
 
-                    <!-- recent detections list -->
-                    <div class="result-list" id="resultList" aria-live="polite">
-                        <!-- items appended here -->
-                    </div>
+  const toast = document.getElementById('toast');
 
-                    <div
-                        style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between;">
-                        <div class="tiny muted">Auto-alerts: <strong id="autoAlerts">ON</strong></div>
-                        <div style="display:flex;gap:8px;">
-                            <button class="btn btn-ghost" id="exportBtn"><i
-                                    class="fa-solid fa-file-export"></i>&nbsp;Export</button>
-                            <button class="btn btn-ghost" id="settingsBtn"><i
-                                    class="fa-solid fa-gear"></i>&nbsp;Settings</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+  let stream = null;
+  let autoInterval = null;
+  let lastObjectUrl = null;
+  let isProcessing = false;
 
-        <!-- Optional: include FontAwesome if not in boiler -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  let stats = { total:0, alerts:0, comp:0, non:0 };
+  let sessionResults = []; // keep small session array for CSV/export (most recent first)
 
-        <script>
-            // Simple client-side interactions & mock detection logic
-            const fileInput = document.getElementById('fileInput');
-            const previewImg = document.getElementById('previewImg');
-            const cameraPlaceholder = document.getElementById('cameraPlaceholder');
-            const video = document.getElementById('video');
-            const overlay = document.getElementById('overlay');
-            const startCamBtn = document.getElementById('startCamBtn');
-            const stopCamBtn = document.getElementById('stopCamBtn');
-            const runDetectBtn = document.getElementById('runDetectBtn');
-            const clearBtn = document.getElementById('clearBtn');
-            const snapshotBtn = document.getElementById('snapshotBtn');
+  function showToast(msg, ms=2200){
+    toast.textContent = msg;
+    toast.style.display = 'block';
+    toast.style.opacity = '1';
+    setTimeout(()=> { toast.style.opacity = '0'; setTimeout(()=> toast.style.display='none', 220); }, ms);
+  }
 
-            const statTotal = document.getElementById('statTotal');
-            const statAlerts = document.getElementById('statAlerts');
-            const statCompliant = document.getElementById('statCompliant');
-            const statNonCompliant = document.getElementById('statNonCompliant');
-            const resultList = document.getElementById('resultList');
-            const inferTime = document.getElementById('inferTime');
+  function updateStats(){
+    statTotal.textContent        = stats.total;
+    statAlerts.textContent       = stats.alerts;
+    statCompliant.textContent    = stats.comp;
+    statNonCompliant.textContent = stats.non;
+  }
 
-            let stream = null;
-            let processing = false;
-            let stats = { total: 0, alerts: 0, comp: 0, non: 0 };
+  function clearAll(){
+    overlay.innerHTML     = '';
+    resultList.innerHTML  = '';
+    sessionResults = [];
+    stats = { total:0, alerts:0, comp:0, non:0 };
+    updateStats();
+    inferTime.textContent = '—';
+    showToast('Session cleared', 1200);
+  }
 
-            // Helper: clear overlay boxes and results
-            function clearDetections() {
-                overlay.innerHTML = '';
-                resultList.innerHTML = '';
-                stats = { total: 0, alerts: 0, comp: 0, non: 0 };
-                updateStats();
-                inferTime.textContent = '—';
-            }
+  clearBtn.addEventListener('click', clearAll);
 
-            clearBtn.addEventListener('click', clearDetections);
+  // File upload preview (revoke previous URL)
+  fileInput.addEventListener('change', e=>{
+    const f = e.target.files[0];
+    if(!f) return;
+    if(lastObjectUrl) URL.revokeObjectURL(lastObjectUrl);
+    lastObjectUrl = URL.createObjectURL(f);
+    previewImg.src = lastObjectUrl;
+    previewImg.style.display        = 'block';
+    video.style.display             = 'none';
+    cameraPlaceholder.style.display = 'none';
+    overlay.innerHTML = '';
+  });
 
-            // File upload preview
-            fileInput.addEventListener('change', (e) => {
-                const f = e.target.files[0];
-                if (!f) return;
-                const url = URL.createObjectURL(f);
-                previewImg.src = url;
-                previewImg.style.display = 'block';
-                video.style.display = 'none';
-                cameraPlaceholder.style.display = 'none';
-                overlay.innerHTML = '';
-            });
+  // Start camera
+  startCamBtn.addEventListener('click', async ()=>{
+    if(stream) return;
+    try{
+      stream = await navigator.mediaDevices.getUserMedia({ video:{ facingMode:'environment' }, audio:false });
+      video.srcObject = stream;
+      await video.play();
+      video.style.display = 'block';
+      previewImg.style.display = 'none';
+      cameraPlaceholder.style.display = 'none';
+      startCamBtn.disabled = true;
+      stopCamBtn.disabled = false;
+      startAutoFramesIfNeeded();
+    } catch(err){
+      console.error('Camera error', err);
+      showToast('Camera unavailable or blocked');
+    }
+  });
 
-            // Start camera
-            startCamBtn.addEventListener('click', async () => {
-                try {
-                    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
-                    video.srcObject = stream;
-                    video.style.display = 'block';
-                    previewImg.style.display = 'none';
-                    cameraPlaceholder.style.display = 'none';
-                    startCamBtn.disabled = true;
-                    stopCamBtn.disabled = false;
-                } catch (err) {
-                    alert('Camera access denied or not available.');
-                    console.error(err);
-                }
-            });
+  // Stop camera
+  stopCamBtn.addEventListener('click', ()=>{
+    stopCamera();
+  });
 
-            // Stop camera
-            stopCamBtn.addEventListener('click', () => {
-                if (stream) {
-                    stream.getTracks().forEach(t => t.stop());
-                    stream = null;
-                }
-                video.style.display = 'none';
-                previewImg.style.display = 'none';
-                cameraPlaceholder.style.display = 'block';
-                startCamBtn.disabled = false;
-                stopCamBtn.disabled = true;
-            });
+  function stopCamera(){
+    if(stream) stream.getTracks().forEach(t=>t.stop());
+    stream = null;
+    if(autoInterval){ clearInterval(autoInterval); autoInterval = null; }
+    video.style.display = 'none';
+    previewImg.style.display = 'none';
+    cameraPlaceholder.style.display = 'block';
+    startCamBtn.disabled = false;
+    stopCamBtn.disabled = true;
+    autoFramesNode.textContent = 'OFF';
+    autoFramesState.textContent = 'OFF';
+  }
 
-            // Snapshot (saves current visible frame as image preview)
-            snapshotBtn.addEventListener('click', () => {
-                const canvas = document.createElement('canvas');
-                const w = video.videoWidth || previewImg.naturalWidth || 640;
-                const h = video.videoHeight || previewImg.naturalHeight || 480;
-                canvas.width = w; canvas.height = h;
-                const ctx = canvas.getContext('2d');
-                if (video.style.display === 'block') ctx.drawImage(video, 0, 0, w, h);
-                else if (previewImg.style.display === 'block') ctx.drawImage(previewImg, 0, 0, w, h);
-                else return alert('No source available to snapshot.');
-                const data = canvas.toDataURL('image/jpeg');
-                previewImg.src = data;
-                previewImg.style.display = 'block';
-                video.style.display = 'none';
-            });
+  // Run snapshot: capture current frame
+  snapshotBtn.addEventListener('click', async ()=>{
+    if(video.style.display === 'block'){
+      const data = captureVideoFrameToDataUrl(video, 0.85);
+      previewImg.src = data;
+      previewImg.style.display = 'block';
+      video.style.display = 'none';
+      cameraPlaceholder.style.display = 'none';
+      await sendDataUrlAsFile(data);
+    } else if(previewImg.src){
+      await sendDataUrlAsFile(previewImg.src);
+    } else {
+      showToast('No source to snapshot');
+    }
+  });
 
-            // Mock detection algorithm - generates random boxes & results to demo UI
-            function mockDetect() {
-                overlay.innerHTML = '';
-                const draw = document.getElementById('drawBoxes').checked;
-                // decide a random number of detections 0..4
-                const count = Math.floor(Math.random() * 4) + 1;
-                const results = [];
-                const area = document.getElementById('cameraArea').getBoundingClientRect();
+  // Toggle auto-frames
+  toggleAutoBtn.addEventListener('click', ()=>{
+    if(autoInterval){
+      clearInterval(autoInterval); autoInterval = null; autoFramesNode.textContent = 'OFF'; autoFramesState.textContent = 'OFF'; toggleAutoBtn.setAttribute('aria-pressed','false');
+      showToast('Auto frames stopped');
+    } else {
+      startAutoFramesIfNeeded(true);
+    }
+  });
 
-                for (let i = 0; i < count; i++) {
-                    const w = Math.max(60, Math.round(Math.random() * (area.width * 0.4)));
-                    const h = Math.max(60, Math.round(Math.random() * (area.height * 0.4)));
-                    const x = Math.round(Math.random() * (area.width - w));
-                    const y = Math.round(Math.random() * (area.height - h));
-                    const score = (Math.random() * 0.5 + 0.5).toFixed(2); // 0.50 - 1.00
-                    const compliant = Math.random() > 0.35; // 65% chance compliant
-                    results.push({ x, y, w, h, score, compliant });
-                    if (draw) {
-                        const box = document.createElement('div');
-                        box.className = 'box';
-                        box.style.left = x + 'px';
-                        box.style.top = y + 'px';
-                        box.style.width = w + 'px';
-                        box.style.height = h + 'px';
-                        const label = document.createElement('div');
-                        label.className = 'label';
-                        label.textContent = `${compliant ? 'Compliant' : 'Alert'} · ${Math.round(score * 100)}%`;
-                        box.appendChild(label);
-                        overlay.appendChild(box);
-                    }
-                }
-                return results;
-            }
+  function startAutoFramesIfNeeded(fromUser=false){
+    if(autoInterval) return;
+    if(!stream || video.style.display !== 'block'){
+      if(fromUser) showToast('Start camera first');
+      return;
+    }
+    autoInterval = setInterval(()=> { captureAndSendFrame(); }, 1200);
+    autoFramesNode.textContent = 'ON';
+    autoFramesState.textContent = 'ON';
+    toggleAutoBtn.setAttribute('aria-pressed','true');
+    if(fromUser) showToast('Auto frames enabled');
+  }
 
-            // Update stats & result list
-            function pushResults(results) {
-                results.forEach(r => {
-                    stats.total += 1;
-                    if (r.compliant) stats.comp += 1; else { stats.non += 1; stats.alerts += 1; }
-                    const item = document.createElement('div');
-                    item.className = 'result-item';
-                    item.innerHTML = `<div class="swatch"></div>
-                        <div style="flex:1;">
-                          <div class="meta">${r.compliant ? 'Compliant' : 'Non-Compliant'} • ${Math.round(r.score * 100)}%</div>
-                          <div class="sub">Detected at ${new Date().toLocaleTimeString()}</div>
-                        </div>
-                        <div style="min-width:54px;text-align:right;" class="tiny muted">${r.w}×${r.h}</div>`;
-                    resultList.insertBefore(item, resultList.firstChild);
-                });
-                updateStats();
-            }
+  // Run detection on current source
+  runDetectBtn.addEventListener('click', async ()=>{
+    if(isProcessing) return;
+    if(previewImg.src){
+      await sendDataUrlAsFile(previewImg.src);
+    } else if(video.style.display === 'block'){
+      await captureAndSendFrame();
+    } else {
+      showToast('Upload an image or start the camera first');
+    }
+  });
 
-            function updateStats() {
-                statTotal.textContent = stats.total;
-                statAlerts.textContent = stats.alerts;
-                statCompliant.textContent = stats.comp;
-                statNonCompliant.textContent = stats.non;
-            }
+  // Capture camera frame + send to /detect-frame
+  async function captureAndSendFrame(){
+    try{
+      if(!stream || video.style.display !== 'block') return;
+      const dataUrl = captureVideoFrameToDataUrl(video, 0.7);
+      await detectFromDataUrl(dataUrl, '/detect-frame');
+    } catch(err){
+      console.error('Frame send error', err);
+    }
+  }
 
-            // Run detection (simulated). In production replace with API / model call
-            runDetectBtn.addEventListener('click', async () => {
-                if (processing) return;
-                processing = true;
-                runDetectBtn.disabled = true;
-                const start = performance.now();
+  // Convert video element into properly scaled dataURL
+  function captureVideoFrameToDataUrl(videoEl, quality=0.8){
+    const w = videoEl.videoWidth;
+    const h = videoEl.videoHeight;
+    const canvas = document.createElement('canvas');
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(videoEl, 0, 0, w, h);
+    return canvas.toDataURL('image/jpeg', quality);
+  }
 
-                // simulate network/model delay (0.2s - 1s)
-                const delay = 200 + Math.random() * 800;
-                await new Promise(r => setTimeout(r, delay));
+  // Send dataURL as multipart file to /detect-image
+  async function sendDataUrlAsFile(dataUrl){
+    return detectFromDataUrl(dataUrl, '/detect-image');
+  }
 
-                // get mock results
-                const results = mockDetect();
-                pushResults(results);
+  // unified detector call
+  async function detectFromDataUrl(dataUrl, endpoint){
+    if(isProcessing) return;
+    isProcessing = true;
+    runDetectBtn.disabled = true;
+    try{
+      const blob = await (await fetch(dataUrl)).blob();
+      const fd = new FormData();
+      fd.append('image', blob, 'snapshot.jpg');
 
-                const elapsed = Math.round(performance.now() - start);
-                inferTime.textContent = `${elapsed} ms`;
-                processing = false;
-                runDetectBtn.disabled = false;
-            });
+      const start = performance.now();
+      const res = await fetch(endpoint, { method:'POST', body:fd });
+      const time = Math.round(performance.now() - start);
+      inferTime.textContent = time + ' ms';
 
-            // clear overlay on page load
-            clearDetections();
+      if(!res.ok){
+        const text = await res.text();
+        showToast('Server error');
+        console.error('Server error:', text);
+        return;
+      }
+      const json = await res.json();
+      handleResult(json, dataUrl);
+    }catch(err){
+      console.error('Upload error', err);
+      showToast('Upload or network error');
+    } finally {
+      isProcessing = false;
+      runDetectBtn.disabled = false;
+    }
+  }
 
-            // simple export: download results list as CSV
-            document.getElementById('exportBtn').addEventListener('click', () => {
-                let csv = 'status,confidence,time\\n';
-                const items = resultList.querySelectorAll('.result-item');
-                items.forEach(it => {
-                    const status = it.querySelector('.meta').textContent.replace(',', '');
-                    const timeTxt = it.querySelector('.sub').textContent.replace('Detected at ', '');
-                    csv += `${status},,${timeTxt}\\n`;
-                });
-                const blob = new Blob([csv], { type: 'text/csv' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url; a.download = 'detections.csv'; a.click();
-                URL.revokeObjectURL(url);
-            });
+  // append result and draw overlay box scaled to visible element
+  function handleResult(json, imgDataUrl){
+    const label = (json.label || 'Unknown').toString();
+    const conf  = (typeof json.confidence === 'number') ? json.confidence : (json.confidence ? Number(json.confidence) : 0);
+    const boxes = json.boxes || [];
 
-            // settings: toggle auto-alerts (demo)
-            document.getElementById('settingsBtn').addEventListener('click', () => {
-                const node = document.getElementById('autoAlerts');
-                node.textContent = node.textContent === 'ON' ? 'OFF' : 'ON';
-            });
+    const isCompliant = /uniform/i.test(label) || /ok/i.test(label) || conf >= 0.6;
 
-            // keyboard: press "D" to simulate detect
-            document.addEventListener('keydown', (e) => {
-                if (e.key.toLowerCase() === 'd') runDetectBtn.click();
-            });
-        </script>
+    stats.total++;
+    if(isCompliant) stats.comp++; else { stats.non++; stats.alerts++; }
+    updateStats();
+
+    const entry = { label, confidence: conf, time: new Date().toLocaleTimeString(), compliant: !!isCompliant };
+    sessionResults.unshift(entry);
+    if(sessionResults.length > 200) sessionResults.pop();
+
+    drawOverlay(boxes, isCompliant, label, conf);
+
+    const item = document.createElement('div');
+    item.className = 'result-item';
+    item.innerHTML =
+      `<div class="dot" style="background:${isCompliant ? 'var(--success)' : 'var(--danger)'}"></div>
+       <div style="flex:1">
+         <div style="font-weight:700">${escapeHtml(label)}</div>
+         <div class="tiny muted">${entry.time}</div>
+       </div>
+       <div class="tiny muted">${(conf*100).toFixed(1)}%</div>`;
+    resultList.prepend(item);
+    while(resultList.children.length > 50) resultList.removeChild(resultList.lastChild);
+  }
+
+  // draw overlay according to boxes (if present) or full-frame if not
+  function drawOverlay(boxes, isCompliant, label, confidence){
+    overlay.innerHTML = '';
+    const visibleEl = (video.style.display === 'block') ? video : ((previewImg.style.display==='block')? previewImg : null);
+    if(!visibleEl) return;
+
+    const ovW = overlay.clientWidth;
+    const ovH = overlay.clientHeight;
+
+    function mapBox(b){
+      const x = b.x * ovW;
+      const y = b.y * ovH;
+      const w = b.w * ovW;
+      const h = b.h * ovH;
+      return { x, y, w, h };
+    }
+
+    if(Array.isArray(boxes) && boxes.length){
+      boxes.forEach(b => {
+        const m = mapBox(b);
+        const box = document.createElement('div');
+        box.style.position = 'absolute';
+        box.style.left = m.x + 'px';
+        box.style.top = m.y + 'px';
+        box.style.width = m.w + 'px';
+        box.style.height = m.h + 'px';
+        box.style.border = `3px solid ${isCompliant ? 'var(--success)' : 'var(--danger)'}`;
+        box.style.borderRadius = '10px';
+        overlay.appendChild(box);
+
+        const badge = document.createElement('div');
+        badge.style.position = 'absolute';
+        badge.style.left = (m.x + 8) + 'px';
+        badge.style.top = (m.y + 8) + 'px';
+        badge.style.padding = '6px 10px';
+        badge.style.fontWeight = '800';
+        badge.style.borderRadius = '999px';
+        badge.style.background = isCompliant ? 'var(--success)' : 'var(--danger)';
+        badge.style.color = '#000';
+        badge.style.fontSize = '12px';
+        badge.innerText = `${label} • ${(confidence*100).toFixed(1)}%`;
+        overlay.appendChild(badge);
+      });
+    } else {
+      const box = document.createElement('div');
+      box.style.position = 'absolute';
+      box.style.inset = '0';
+      box.style.border = `3px solid ${isCompliant ? 'var(--success)' : 'var(--danger)'}`;
+      box.style.borderRadius = '12px';
+      overlay.appendChild(box);
+
+      const badge = document.createElement('div');
+      badge.style.position = 'absolute';
+      badge.style.left = '12px';
+      badge.style.top = '12px';
+      badge.style.padding = '6px 12px';
+      badge.style.fontWeight = '800';
+      badge.style.borderRadius = '999px';
+      badge.style.background = isCompliant ? 'var(--success)' : 'var(--danger)';
+      badge.style.color = '#000';
+      badge.innerText = `${label} • ${(confidence*100).toFixed(1)}%`;
+      overlay.appendChild(badge);
+    }
+  }
+
+  // Export CSV (sessionResults)
+  exportBtn.addEventListener('click', ()=>{
+    if(!sessionResults.length){ showToast('No session results to export'); return; }
+    const rows = [['label','confidence','time','compliant']];
+    sessionResults.forEach(r => rows.push([ r.label.replace(/,/g,''), (r.confidence*100).toFixed(1), r.time, r.compliant ? 'yes' : 'no' ]));
+    const csv = rows.map(r => r.join(',')).join('\n');
+    const blob = new Blob([csv], { type:'text/csv' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = `detections_${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    showToast('CSV exported');
+  });
+
+  // Keyboard shortcut D to run detection
+  document.addEventListener('keydown', (e)=>{
+    if(e.key.toLowerCase() === 'd') runDetectBtn.click();
+  });
+
+  // small helper to escape HTML
+  function escapeHtml(str){ return String(str).replace(/[&<>"']/g, s=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[s]); }
+
+  // initial state
+  clearAll();
+
+  // cleanup when leaving page (safety)
+  window.addEventListener('beforeunload', ()=>{
+    if(stream) stream.getTracks().forEach(t=>t.stop());
+    if(autoInterval) clearInterval(autoInterval);
+    if(lastObjectUrl) URL.revokeObjectURL(lastObjectUrl);
+  });
+</script>
+
+<%- include('includes/footer.ejs') %>

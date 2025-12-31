@@ -1,2 +1,0 @@
-0 uniform
-1 no id
