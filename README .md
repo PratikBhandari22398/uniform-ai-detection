@@ -1,10 +1,3 @@
-Got it 👍 Prateek
-Below is **FULL, READY-TO-COPY README.md**.
-👉 **Just copy everything exactly as it is and paste into `README.md`**.
-
----
-
-````markdown
 # 🎓 Uniform AI Detection System
 
 An AI-powered web application that detects whether a student is wearing a proper uniform using image-based analysis.  
@@ -17,38 +10,39 @@ This project is built for educational institutions to automate and simplify unif
 The **Uniform AI Detection System** allows students or teachers to upload an image of a student.  
 The system analyzes the image using an AI model and determines whether the student is wearing the correct uniform.
 
-This project demonstrates the integration of **AI + Full Stack Web Development** in a real-world academic use case.
+This project demonstrates the integration of **Artificial Intelligence + Full Stack Web Development** in a real-world academic use case.
 
 ---
 
 ## ✨ Features
 
-- 🧠 AI-based uniform detection
-- 👤 Role-based authentication (Student / Teacher)
-- 📤 Image upload & processing
-- 🎨 Clean and responsive UI (EJS)
-- 🔐 Secure backend with MongoDB
-- 🧩 Modular MVC architecture
+- 🧠 AI-based uniform detection  
+- 👤 Role-based authentication (Student / Teacher)  
+- 📤 Image upload and processing  
+- 🎨 Clean and responsive UI using EJS  
+- 🔐 Secure backend with MongoDB  
+- 🧩 Modular MVC architecture  
 
 ---
 
 ## 🛠️ Tech Stack
 
 ### 🌐 Frontend
-- HTML5
-- CSS3
-- EJS (Embedded JavaScript Templates)
+- HTML5  
+- CSS3  
+- EJS (Embedded JavaScript Templates)  
 
 ### ⚙️ Backend
-- Node.js
-- Express.js
-- MongoDB
-- Mongoose
+- Node.js  
+- Express.js  
+- MongoDB  
+- Mongoose  
 
 ### 🤖 AI / ML
-- TensorFlow / TensorFlow.js
+- TensorFlow / TensorFlow.js  
 - Custom-trained uniform detection model  
-*(Model files are intentionally excluded from this repository)*
+
+> ⚠️ AI model files are intentionally excluded from this repository.
 
 ---
 
